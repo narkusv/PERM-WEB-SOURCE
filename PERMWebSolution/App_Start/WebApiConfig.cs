@@ -19,6 +19,9 @@ namespace PERMWebSolution
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+            //This package allows the ASP.NET Web API framework to trace to System.Diagnostics.Trace.
+            //http://go.microsoft.com/fwlink/?LinkId=269874
+            config.EnableSystemDiagnosticsTracing();
         }
     }
 }
