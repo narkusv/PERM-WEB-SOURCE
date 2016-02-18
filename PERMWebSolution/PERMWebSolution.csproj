@@ -138,7 +138,9 @@
     <Content Include="scripts\bootstrap.min.js" />
     <Content Include="scripts\jquery-1.9.1.js" />
     <Content Include="scripts\jquery-1.9.1.min.js" />
-    <Content Include="Views\ForgotPassword.html" />
+    <Content Include="Views\ResetPassword.html">
+      <BrowseToURL>~/Views/ResetPassword.html</BrowseToURL>
+    </Content>
     <Content Include="Views\Logon.html" />
     <Content Include="Views\Register.html" />
     <Content Include="Web.config" />
