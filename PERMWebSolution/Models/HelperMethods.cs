@@ -11,7 +11,7 @@ namespace PERMWebSolution.Models
         /// Method for generating new session id
         /// </summary>
         /// <returns>string sessionID</returns>
-        public static string generateSessionID()
+        public static string generateRandomString()
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             var random = new Random();
