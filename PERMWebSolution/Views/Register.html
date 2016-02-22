@@ -39,15 +39,31 @@
                 document.getElementById("signup-alert").style.display = "block";
                 document.getElementById("signup-alert").innerHTML = "User name is not valid. Userame should be user@email.adress";
             }
-
+            userNameOccupied(username);
             //document.getElementById("email").focus();
+        }
+        function userNameOccupied(username)
+        {
+            $.ajax({
+                url: "/api/User/" + username,
+                type: 'GET',
+                contentType: "application/json;charset=utf-8",
+                dataType: 'json',
+                success: function (response) {
+                    document.getElementById("signup-alert").style.display = "block";
+                    document.getElementById("signup-alert").innerHTML = "Such User Name is already accupied.";
+                },
+                error: function (request, message, error) {
+                    handleException(request, message, error);
+                    userNotSaved(message);
+                }
+            });
         }
         function clearError()
         {
             document.getElementById("signup-alert").style.display = "none";
             document.getElementById("signup-alert").innerHTML = "";
         }
-
         function checkNonEmpty(parameter)
         {
             var fieldVal = document.getElementById(parameter).value;
@@ -109,7 +125,6 @@
             document.getElementById("signup-alert").innerHTML = "<strong> Failure!</strong> Something went wrong. Please try again";
           //  setTimeout(function () { window.location.replace = 'Logon.html' }, 5000);
         }
-
         </script>
 </head>
 <body>
