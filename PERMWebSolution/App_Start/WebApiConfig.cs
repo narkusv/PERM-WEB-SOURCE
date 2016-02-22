@@ -15,7 +15,7 @@ namespace PERMWebSolution
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
-                name: "PERMtApi",
+                name: "PERMApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
