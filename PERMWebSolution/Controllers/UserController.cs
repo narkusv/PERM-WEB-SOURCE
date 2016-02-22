@@ -44,17 +44,17 @@ namespace PERMWebSolution.Controllers
             }
             return ret;
 
-            if (usr.logInUser(usr))
+         /*   if (usr.logInUser(usr))
             {
                 ret = Ok(usr.sessionID);
             }
             else
             {
-                /*http://stackoverflow.com/questions/23820312/httperror-and-ihttpactionresult
-                */
+                // http://stackoverflow.com/questions/23820312/httperror-and-ihttpactionresult
+                
                 ret =  ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.Forbidden, new HttpError("User name is already registered")));
             }
-            return ret;
+            return ret;*/
         }
 
         // PUT api/<controller>/5

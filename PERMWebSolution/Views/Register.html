@@ -100,8 +100,9 @@
         function userSaved(response)
         {
             document.getElementById("signup-alert-success").style.display = "block";
-            document.getElementById("signup-alert-success").innerHTML = "<strong> Success!</strong> User registered";
-            setTimeout(function () { window.location.replace = 'Logon.html' }, 5000);
+            document.getElementById("signup-alert-success").innerHTML = "<strong> Success!</strong> User registered. Soon you will be redirected to Login page";
+            document.getElementById("signupform").reset(); //erases all fields
+            setTimeout(function () { window.location = "Logon.html" }, 5000);
         }
         function userNotSaved(response) {
             document.getElementById("signup-alert").style.display = "block";
