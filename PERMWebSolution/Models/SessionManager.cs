@@ -71,7 +71,7 @@ namespace PERMWebSolution.Models
 
             string sql = "INSERT INTO [userSession] VALUES (@userID, @sessionID, @expTime)";
             var param = new Dictionary<string, object>();
-            param.Add("@userID", userID); param.Add("@sessionID", HelperMethods.generateSessionID()); param.Add("@expTime", now);
+            param.Add("@userID", userID); param.Add("@sessionID", HelperMethods.generateRandomString()); param.Add("@expTime", now);
 
             var result = DBContext.ExecuteQueryTable(sql, param);
             return true;
