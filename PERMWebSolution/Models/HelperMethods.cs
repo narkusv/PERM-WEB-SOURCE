@@ -25,7 +25,7 @@ namespace PERMWebSolution.Models
         /// </summary>
         /// <param name="value">String to be encrypted</param>
         /// <returns>SHA256 encrypted string</returns>
-        public static string sha256_hash(string value)
+        public static string sha256Encrypt(string value)
         {
             StringBuilder Sb = new StringBuilder();
 
