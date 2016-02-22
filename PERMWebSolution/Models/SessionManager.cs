@@ -58,18 +58,7 @@ namespace PERMWebSolution.Models
 
         }
 
-        /// <summary>
-        /// Method for generating new session id
-        /// </summary>
-        /// <returns>string sessionID</returns>
-        private string generateSessionID()
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            var random = new Random();
-            sessionID = new string(Enumerable.Repeat(chars, 24)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
-            return sessionID;
-        }
+       
         /// <summary>
         /// Saves session to the session table
         /// </summary>
@@ -82,7 +71,7 @@ namespace PERMWebSolution.Models
 
             string sql = "INSERT INTO [userSession] VALUES (@userID, @sessionID, @expTime)";
             var param = new Dictionary<string, object>();
-            param.Add("@userID", userID); param.Add("@sessionID", generateSessionID()); param.Add("@expTime", now);
+            param.Add("@userID", userID); param.Add("@sessionID", HelperMethods.generateSessionID()); param.Add("@expTime", now);
 
             var result = DBContext.ExecuteQueryTable(sql, param);
             return true;
