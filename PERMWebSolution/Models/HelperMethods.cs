@@ -7,6 +7,9 @@ using System.Web;
 
 namespace PERMWebSolution.Models
 {
+    /// <summary>
+    /// Class for static methods that must be access as needed. Feel free to add new ones.
+    /// </summary>
     public static class HelperMethods
     {
         /// <summary>
