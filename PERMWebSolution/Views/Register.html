@@ -8,6 +8,7 @@
     <script src="../scripts/errorhandling.js"></script>
     
     <script language="javascript">
+        //method to check passwd
         function checkPassword(parameter)
         {
             var minNumberofChars = 6;
@@ -16,9 +17,6 @@
             var password = document.getElementById(parameter).value;
             var reP = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
 
-         /*   if (password.length < minNumberofChars || password.length > maxNumberofChars) {
-              //  response += "Password length must be 6-16 symobols long. <br>";
-            }*/
             if (parameter == "Rpassword" && (document.getElementById("password").value != document.getElementById("Rpassword").value))
             {
                 document.getElementById("signup-alert").style.display = "block";
@@ -28,8 +26,8 @@
                 document.getElementById("signup-alert").style.display = "block";
                 document.getElementById("signup-alert").innerHTML = "Password should be from 6 to 16 symbols and<br>should contain atleast one digit and one special character !@#$%^&*";
             }
-            //return response;
         }
+        //function checks if user name is valid e-mail, and provided email is not already used byt the registered user
         function checkUsername()
         {
             var username = document.getElementById("email").value;
@@ -39,43 +37,40 @@
                 document.getElementById("signup-alert").style.display = "block";
                 document.getElementById("signup-alert").innerHTML = "User name is not valid. Userame should be user@email.adress";
             }
-            userNameOccupied(username);
-            //document.getElementById("email").focus();
+            if (document.getElementById("signup-alert").style.display == "none") {
+                //when passing string with dots to API always ADD  slash at the back of URI
+                //this ajax checks if user name isnot occupied
+                $.ajax({
+                    url: "/api/Users/checkEmail/" + username + "/", //WE ADD "/" to GET Ajax method otherwise [.] will not resolve the target controller action!! GET mean we have to attacha all the parameters to the URI
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) { // this part will be executed when controller return Ok -> controler found email in database
+                        document.getElementById("signup-alert").style.display = "block";
+                        document.getElementById("signup-alert").innerHTML = "User name is already registered";
+                    },
+                    error: function (request, message, error) { // this part will be executed when controller returns enything but the Ok HTTP status (200)
+                        handleException(request, message, error);
+                    }
+                });
+            } 
         }
-        function userNameOccupied(username)
-        {
-            $.ajax({
-                url: "/api/User/" + username,
-                type: 'GET',
-                contentType: "application/json;charset=utf-8",
-                dataType: 'json',
-                success: function (response) {
-                    document.getElementById("signup-alert").style.display = "block";
-                    document.getElementById("signup-alert").innerHTML = "Such User Name is already accupied.";
-                },
-                error: function (request, message, error) {
-                    handleException(request, message, error);
-                    userNotSaved(message);
-                }
-            });
-        }
+        //disables/hides error content on page
         function clearError()
         {
             document.getElementById("signup-alert").style.display = "none";
             document.getElementById("signup-alert").innerHTML = "";
         }
+        //function checks if field with 'parameter' is not empty
         function checkNonEmpty(parameter)
         {
             var fieldVal = document.getElementById(parameter).value;
             if (fieldVal == "")
             {
                 document.getElementById("signup-alert").style.display = "block";
-              //  var val = document.getElementById(parameter).getAttribute("placeholder");
                 document.getElementById("signup-alert").innerHTML = "Field " + document.getElementById(parameter).getAttribute("placeholder") + " cannot be emty";
             }
-            //document.getElementById(param).textContent;
-
         }
+        //checks if input filds are not empty and the calls saveUser on controller
         function registerUser()
         {
             checkNonEmpty("email");
@@ -91,39 +86,41 @@
 
             if (document.getElementById("signup-alert").style.display == "none")
             {
-                var newUser = new Object();
+                var newUser = new Object(); //create new object. Of new object attribute names matches class attributes within the controller, then automated 
                 newUser.userName = document.getElementById("email").value;
                 newUser.userPassword = document.getElementById("password").value;
                 newUser.Name = document.getElementById("firstname").value;
                 newUser.Surname = document.getElementById("lastname").value;
                 $.ajax({
-                    url: "/api/User/",
+                    url: "/api/Users/saveUser" , //POST mean that data goes inside the HTML body, but not the URI
                     type: 'POST',
                     contentType: "application/json;charset=utf-8",
-                    data: JSON.stringify(newUser),
+                    data: JSON.stringify(newUser),  //all the body we convert to Json format and pass it to the controller.0
+                                                    //Conroller in background will convert this string into User object of the Models User class ir attribute names matches each other
                     success: function (response)
                     {
-                        userSaved(response);
+                        userSaved(response); //call method if controller returns Ok (HTTP 200)
                     },
                     error: function (request, message, error)
                     {
-                        handleException(request, message, error);
+                        handleException(request, message, error); //call group of methods if got error from controller.
                         userNotSaved(message);
                     }
                 });
             }
         }
+        //called if user saved successfully
         function userSaved(response)
         {
             document.getElementById("signup-alert-success").style.display = "block";
             document.getElementById("signup-alert-success").innerHTML = "<strong> Success!</strong> User registered. Soon you will be redirected to Login page";
             document.getElementById("signupform").reset(); //erases all fields
-            setTimeout(function () { window.location = "Logon.html" }, 5000);
+            setTimeout(function () { window.location = "Logon.html" }, 5000); //redirect after 5s to logon.html
         }
+        //called if we could not managed to save user
         function userNotSaved(response) {
             document.getElementById("signup-alert").style.display = "block";
-            document.getElementById("signup-alert").innerHTML = "<strong> Failure!</strong> Something went wrong. Please try again";
-          //  setTimeout(function () { window.location.replace = 'Logon.html' }, 5000);
+            document.getElementById("signup-alert").innerHTML = "<strong> Failure!</strong> Possibly User name is invalid. Please try again.";
         }
         </script>
 </head>
