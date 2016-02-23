@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.SessionState;
+﻿using System.Collections.Generic;
 
 namespace PERMWebSolution.Models
 {
@@ -23,12 +19,11 @@ namespace PERMWebSolution.Models
         /// </summary>
         /// <param name="user">user data from POST request</param>
         /// <returns>On success returns session</returns>
-        public bool logInUser(User user)
+     /*   public bool logInUser(User user) //------------------------ not yet implemented
         {
            // this.user.MemberwiseClone();
             this.user = (User)user.MemberwiseClone();
-
-            if (isUserRegistered())
+            if (true)
             {
                // this.user.userID = 1;
                 SessionManager sM = new SessionManager(this.user.userID);
@@ -37,23 +32,21 @@ namespace PERMWebSolution.Models
             }
             else
                 return false;
-        }
+        }*/
         /// <summary>
-        /// Checks user credentials in database
+        /// Checks userName is already present in database
         /// </summary>
-        /// <returns>True if user exists</returns>
-        private bool isUserRegistered()
+        /// <returns>True if username i.e. email is already used</returns>
+        public bool isUserNameExists(string uName)
         {
-            string sql = "SELECT * FROM [User] WHERE [Id] = @uID";
+            string sql = "SELECT [userName] FROM [User] WHERE UPPER([userName]) = UPPER(@uName)"; //compare strings regardless string case
             var param = new Dictionary<string, object>();
-            param.Add("@uID", user.userID);
+            param.Add("@uName", user.userID);
 
             var result = DBContext.ExecuteQueryTable(sql, param);
 
-            if (result.Rows.Count > 0)
-            {
+            if (result != null && result.Rows.Count > 0)
                 return true;
-            }
             else
                 return false;
         }
@@ -62,24 +55,34 @@ namespace PERMWebSolution.Models
         /// </summary>
         /// <param name="user">variable type of user</param>
         /// <returns>bool result if user sucessfully saved in database</returns>
-        public string saveUser(User user)
+        public bool saveUser(User user)
         {
-            string sql = "SELECT * FROM [User] WHERE [userName] = @userName";
+            string sql = "SELECT * FROM [User] WHERE UPPER([userName]) = UPPER(@userName)";
             var param = new Dictionary<string, object>();
             param.Add("@userName", user.userName);
-            param.Add("@userPasswd",);
-            param.Add("@salt", );
-            param.Add("@name",);
-            param.Add("@surname", );
 
             var result = DBContext.ExecuteQueryTable(sql, param);
-            if (result.Rows.Count == 0) //meens no such user thus we can save it
-            {
-                sql = "INSERT INTO [User] (userName, userPassword, salt, name, surname) VALUES (@userID, @sessionID, @expTime)";
-            }
-            string result = ""; //mocup data needs to be implemented           
 
-            return result;
+            if (result != null && result.Rows.Count == 0) //DB returs result and if no such user found (count rows in tble is 0) then we can save it
+            {
+                param.Clear(); //remove all entries from Dictionary
+                var salt = HelperMethods.generateRandomString(); //get random string from hgelper method
+                var passwd = user.userPassword + salt; //ad random sting to user password
+                var encrypted = HelperMethods.sha256Encrypt(passwd); //hash user passwod and pass to db - further we would not know old password, to reset - neet to generate new one
+
+                sql = "INSERT INTO [User] (userName, userPassword, salt, name, surname) VALUES (@userName, @userPasswd, @salt, @name, @surname)";
+
+                param.Add("@userName", user.userName);
+                param.Add("@userPasswd", encrypted);
+                param.Add("@salt", salt);
+                param.Add("@name", user.Name);
+                param.Add("@surname", user.Surname);
+                              
+                result = DBContext.ExecuteQueryTable(sql, param); // run insert
+                if (result != null)
+                    return true; //if not null then succeeded
+            }         
+            return false; //else just return false -  something went wrong while saving in database
         }
     }
 }
