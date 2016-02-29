@@ -16,6 +16,7 @@ namespace PERMWebSolution.Controllers
 
     public class UserController : ApiController
     {
+        private User usr;
         /// <summary>
         /// Sample no parameter GET method, irf not used should be deleted
         /// </summary>
@@ -60,12 +61,18 @@ namespace PERMWebSolution.Controllers
         [Route("api/Users/checkEmail/{email}")] //if you pass string by GET method from Ajax, MAKE SURE, that Ajax URI ends with leading "/" symbol ->>> it is important, otherwise this route method will not be resolved!
         public IHttpActionResult checkEmail(string email)
         {
-            var a = email;
             IHttpActionResult ret = null;
 
-            //TODO implement check
+            usr = new User();
+            if (!usr.isUserNameExists(email))
+            {
 
-            ret = Ok();
+                ret = Ok();
+            }
+            else
+            {
+                ret = NotFound();
+            }
             return ret;
         }
         /// <summary>
