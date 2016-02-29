@@ -43,13 +43,10 @@
                 $.ajax({
                     url: "/api/Users/checkEmail/" + username + "/", //WE ADD "/" to GET Ajax method otherwise [.] will not resolve the target controller action!! GET mean we have to attacha all the parameters to the URI
                     type: 'GET',
-                    dataType: 'json',
-                    success: function (response) { // this part will be executed when controller return Ok -> controler found email in database
+                 //   dataType: 'json', //commented because GET method does not returns JSON
+                    error: function (request, message, error) { // this part will be executed when controller returns enything but the Ok HTTP status (200)
                         document.getElementById("signup-alert").style.display = "block";
                         document.getElementById("signup-alert").innerHTML = "User name is already registered";
-                    },
-                    error: function (request, message, error) { // this part will be executed when controller returns enything but the Ok HTTP status (200)
-                        handleException(request, message, error);
                     }
                 });
             } 
@@ -70,7 +67,7 @@
                 document.getElementById("signup-alert").innerHTML = "Field " + document.getElementById(parameter).getAttribute("placeholder") + " cannot be emty";
             }
         }
-        //checks if input filds are not empty and the calls saveUser on controller
+        //checks if input fields are not empty and calls saveUser on controller
         function registerUser()
         {
             checkNonEmpty("email");
