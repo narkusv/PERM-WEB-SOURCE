@@ -41,7 +41,7 @@ namespace PERMWebSolution.Models
         {
             string sql = "SELECT [userName] FROM [User] WHERE UPPER([userName]) = UPPER(@uName)"; //compare strings regardless string case
             var param = new Dictionary<string, object>();
-            param.Add("@uName", user.userID);
+            param.Add("@uName", uName);
 
             var result = DBContext.ExecuteQueryTable(sql, param);
 
