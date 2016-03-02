@@ -1,3 +1,8 @@
-﻿.bordera{
-    border-width: 3px;
+﻿#deleterow {
+    position: absolute;
+    right: 5px;
+   
+    height: 14px;
+    margin: auto;
+   
 }

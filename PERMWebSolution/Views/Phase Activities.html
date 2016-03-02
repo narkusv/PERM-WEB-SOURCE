@@ -1,8 +1,7 @@
 ﻿<!DOCTYPE html>
-
-
 <html>
 <head>
+
     <link href="../Content/bootstrap.min.css" rel="stylesheet" />
     <link href="../Content/style.css" rel="stylesheet" />
     <script src="../scripts/jquery-1.9.1.min.js"></script>
@@ -55,14 +54,13 @@
              "<div id='formElement' class='form-group'>"+
 
                             "<div class='col-xs-2 col-md-1'>"+
-                                "<p class='form-control' >"+(index+1)+"</p>"+
+                                "<p id='rowId' class='form-control' >"+(index+1)+"</p>"+
                             "</div>"+
                             "<div class='col-xs-8 col-md-9'>"+
-
-                                "<input type='text' id='firstname' class='form-control' name='Name' value='"+res.Name+"' placeholder='Typing name of Necessary Activity for to reach Goal'>"+
+                                "<input type='text' id='Name' class='form-control' name='Name' value='"+res.Name+"' placeholder='Typing name of Necessary Activity for to reach Goal'>"+
                             "</div>"+
                             "<div class='col-xs-2 col-md-2'>"+
-                                "<label class='checkbox-inline'><input type='checkbox' name='isActivated'"+res.isActivated+">Select</label>"+
+                                "<label class='checkbox-inline'><input type='checkbox' name='isActivated'"+">Select</label>"+
                           "</div>"+
 
 
@@ -80,8 +78,7 @@
                                 "<p id='rowId' class='form-control' >"+numberOfRows+"</p>"+
                             "</div>"+
                             "<div class='col-xs-8 col-md-9'>"+
-                                "<input type='text' id='firstname' class='form-control' name='Name' placeholder='Typing name of Necessary Activity for to reach Goal'>"+
-
+                                "<input type='text' id='Name' class='form-control' name='Name' placeholder='Typing name of Necessary Activity for to reach Goal'>"+
                             "</div>"+
                             "<div class='col-xs-2 col-md-2'>"+
                                 "<label class='checkbox-inline'><input type='checkbox' name='isActivated'>Select</label>"+
@@ -103,6 +100,34 @@
 
         }
 
+        function SaveData(){
+                var activityList = []; //create new object. Of new object attribute names matches class attributes within the controller, then automated
+                 $('#activityform').children('#formElement').each(function (index) {
+                    activityList.push($(this).find("input:text").val());
+                });
+                console.log(activityList);
+                $.ajax({
+                    url: "/api/PhaseActivities/SavePhaseActivity" , //POST mean that data goes inside the HTML body, but not the URI
+                    type: 'POST',
+                    contentType: "application/json;charset=utf-8",
+                    data: JSON.stringify(activityList),  //all the body we convert to Json format and pass it to the controller.0
+                                                    //Conroller in background will convert this string into User object of the Models User class ir attribute names matches each other
+                    success: function (response)
+                    {
+                       console.log(response);
+                    },
+                    error: function (request, message, error)
+                    {
+                       console.log(error);
+                    }
+                });
+
+        }
+
+
+
+
+
 
     </script> 
 </head>
@@ -110,7 +135,7 @@
     <div class="row">
         <div id="header" />
     </div>
-     
+
 
     <div class="container">
         <div id="ActivityInfo" class="mainbox col-md-9">
@@ -130,14 +155,12 @@
                       
                     </div>
                    </div>
+
+                  
                  </div>
-      
-
-
         </div>
 
-       </div>
- 
+
   
 </body>
 </html>

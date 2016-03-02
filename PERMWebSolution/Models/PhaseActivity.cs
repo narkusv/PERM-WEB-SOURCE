@@ -7,10 +7,9 @@ namespace PERMWebSolution.Models
 {
     public class PhaseActivity
     {
-        public int activityId { get; set; }
+     
         public string Name { get; set; }
-        public  string isActivated { get; set; }
-
+   
 
 
 
@@ -20,13 +19,24 @@ namespace PERMWebSolution.Models
             Random rand = new Random();
             for(int i = 0; i <=6; i++)
             {
-                activities.Add(new PhaseActivity { activityId = i, Name = (rand.Next(1, 10) > 5) ? "Cheeseburgers" : "", isActivated = (rand.Next(0, 10)>5 ? "checked" : "") });
+                activities.Add(new PhaseActivity { Name = (rand.Next(1, 10) > 5) ? "Cheeseburgers" : ""});
 
             }
 
 
             return activities;
 
+        }
+
+
+        /// <summary>
+        /// activity add method
+        /// </summary>
+        /// <param name="activityList">List of activity names</param>
+        /// <returns>string result of activity data converted back to activity from frontend</returns>
+        public bool savePhaseActivity(List<PhaseActivity> activityList)
+        {
+            return true;
         }
     }
 
