@@ -13,7 +13,7 @@
 	<meta charset="utf-8" />
     <script>
 
-
+        var numberOfRows = 0;
         $(document).ready(function () {
                  $("#header").load("header.html");
                 GetPhaseActivityList();
@@ -46,27 +46,62 @@
         function responseAddRow(index, res) {
         $("#activityform").append(
               responseBuildTableRow(index, res));
-                console.log(index);
+                numberOfRows++;
         }
 
       function responseBuildTableRow(index, res) {
             var ret =
-             " <div class='form-group'>"+
-                            "<div class='col-md-1'>"+
+
+             "<div id='formElement' class='form-group'>"+
+
+                            "<div class='col-xs-2 col-md-1'>"+
                                 "<p class='form-control' >"+(index+1)+"</p>"+
                             "</div>"+
-                            "<div class='col-md-8'>"+
+                            "<div class='col-xs-8 col-md-9'>"+
 
                                 "<input type='text' id='firstname' class='form-control' name='Name' value='"+res.Name+"' placeholder='Typing name of Necessary Activity for to reach Goal'>"+
                             "</div>"+
-                            "<div class='col-md-2'>"+
+                            "<div class='col-xs-2 col-md-2'>"+
                                 "<label class='checkbox-inline'><input type='checkbox' name='isActivated'"+res.isActivated+">Select</label>"+
                           "</div>"+
+
 
                         "</div>"
             return ret;
         }
 
+
+        function AddEmptyRow() {
+        numberOfRows++;
+        $("#activityform").append(
+            "<div id='formElement' class='form-group'>"+
+
+                            "<div class='col-xs-2 col-md-1'>"+
+                                "<p id='rowId' class='form-control' >"+numberOfRows+"</p>"+
+                            "</div>"+
+                            "<div class='col-xs-8 col-md-9'>"+
+                                "<input type='text' id='firstname' class='form-control' name='Name' placeholder='Typing name of Necessary Activity for to reach Goal'>"+
+
+                            "</div>"+
+                            "<div class='col-xs-2 col-md-2'>"+
+                                "<label class='checkbox-inline'><input type='checkbox' name='isActivated'>Select</label>"+
+                          "</div>"+
+
+
+                        "</div>"
+        )}
+
+
+        function DeleteRows() {
+        numberOfRows=0;
+        $("#formElement input:checked").parents("#formElement").remove()
+
+        $('#activityform').children('#formElement').each(function (index) {
+          $(this).find("p").text(index+1)
+            numberOfRows++;
+        });
+
+        }
 
 
     </script> 
@@ -78,7 +113,7 @@
      
 
     <div class="container">
-        <div id="ActivityInfo" class="mainbox col-md-12">
+        <div id="ActivityInfo" class="mainbox col-md-9">
            
 
                      <div class="panel panel-info">
@@ -86,17 +121,23 @@
                              <div class="panel-title">Enter activity info</div>
                          </div>
                               <div class="panel-body">
-                                <form id="activityform" class="form-horizontal" role="form">
+                                <form id="activityform"  class="form-horizontal algn" role="form">
 
+                                 
                                 </form>
-                         
+                                  <button type="button" onclick="AddEmptyRow()" class="btn btn-default col-md-offset-1">Add row</button>
+                                  <button type="button" onclick="DeleteRows()" class="btn btn-default col-md-offset-1">Delete rows</button>
                       
                     </div>
                    </div>
                  </div>
+      
+
 
         </div>
-    </div>
+
+       </div>
+ 
   
 </body>
 </html>
