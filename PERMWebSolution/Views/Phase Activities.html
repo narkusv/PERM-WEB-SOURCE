@@ -1,7 +1,10 @@
 ﻿<!DOCTYPE html>
+
+
 <html>
 <head>
     <link href="../Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="../Content/style.css" rel="stylesheet" />
     <script src="../scripts/jquery-1.9.1.min.js"></script>
     <script src="../scripts/bootstrap.min.js"></script>
     <script src="../scripts/errorhandling.js"></script>
@@ -9,13 +12,91 @@
     <title>01 Phase Activities</title>
 	<meta charset="utf-8" />
     <script>
-        $(function(){
-         $("#header").load("header.html");
-}   );
+
+
+        $(document).ready(function () {
+                 $("#header").load("header.html");
+                GetPhaseActivityList();
+        });
+
+
+         function GetPhaseActivityList()
+        {
+            $.ajax({
+                url: "/api/PhaseActivity/GetPhaseActivity/",
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    responseListSuccess(response);
+                },
+                error: function (response) {
+                    alert("Not OK");
+                }
+            });
+        }
+
+     function responseListSuccess(response) {
+            $.each(response, function (index, res) {
+                responseAddRow(index, res);
+            });
+        }
+
+
+
+        function responseAddRow(index, res) {
+        $("#activityform").append(
+              responseBuildTableRow(index, res));
+                console.log(index);
+        }
+
+      function responseBuildTableRow(index, res) {
+            var ret =
+             " <div class='form-group'>"+
+                            "<div class='col-md-1'>"+
+                                "<p class='form-control' >"+(index+1)+"</p>"+
+                            "</div>"+
+                            "<div class='col-md-8'>"+
+
+                                "<input type='text' id='firstname' class='form-control' name='Name' value='"+res.Name+"' placeholder='Typing name of Necessary Activity for to reach Goal'>"+
+                            "</div>"+
+                            "<div class='col-md-2'>"+
+                                "<label class='checkbox-inline'><input type='checkbox' name='isActivated'"+res.isActivated+">Select</label>"+
+                          "</div>"+
+
+                        "</div>"
+            return ret;
+        }
+
+
+
     </script> 
 </head>
 <body>
-  <div id="header"/>
+    <div class="row">
+        <div id="header" />
+    </div>
+     
 
+    <div class="container">
+        <div id="ActivityInfo" class="mainbox col-md-12">
+           
+
+                     <div class="panel panel-info">
+                         <div class="panel-heading">
+                             <div class="panel-title">Enter activity info</div>
+                         </div>
+                              <div class="panel-body">
+                                <form id="activityform" class="form-horizontal" role="form">
+
+                                </form>
+                         
+                      
+                    </div>
+                   </div>
+                 </div>
+
+        </div>
+    </div>
+  
 </body>
 </html>
